@@ -1,15 +1,17 @@
+//导入发送http请求的包
 const request = require('superagent')
-//导入cheerio包 解析http
+//导入爬去数据的包
 const cheerio = require('cheerio')
+//导入定时任务的包
 const schedule = require('node-schedule');
-//导入邮箱验证码的包
+//导入发送邮件的包
 const nodemailer = require('nodemailer')
 let tq, wd, jy;
 let day=0
 function getMojiData() {
   return new Promise((resolve, reject) => {
     request
-      .get('http://tianqi.moji.com/tommorrow/china/zhejiang/taizhou')
+      .get('http://tianqi.moji.com/tommorrow/china/zhejiang/taizhou') //这是爬取成都明天的天气，如果是其他城市直接换那个城市的页面爬取就行
       .end((err, res) => {
         if (err) return console.log('数据请求失败')
         const $ = cheerio.load(res.text)
@@ -38,15 +40,15 @@ function getMojiData() {
             port: 465,
             secure: true, // true for 465, false for other ports
             auth: {
-              user: '505555203@qq.com', // 你的邮箱账号
-              pass: 'vycewbhtlautcagj', //你的邮箱SMTP授权码
+              user: '@qq.com', // 你的邮箱账号
+              pass: '*****', //你的邮箱SMTP授权码
             },
           })
 
           // send mail with defined transport object
           let options = {
-            from: '"The most handsome people" <505555203@qq.com>',
-            to: '1334934740@qq.com',
+            from: '"The most handsome people" <@qq.com>',
+            to: '@qq.com',
             subject: `每日提醒--第${day}天`, // 
             html: `<p>已经很晚了，你该睡觉了。</p>
             <p>明日天气:${tq}</p>
